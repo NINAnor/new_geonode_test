@@ -16,7 +16,6 @@ dist
 
 settings.py
 local_settings.py
-/static/lib/
 /upload/
 /static/geonode/junit.xml
 /geoserver/
