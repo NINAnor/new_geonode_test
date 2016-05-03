@@ -11,10 +11,14 @@
    {{ block.super }}
   {% block hero %}
   <div class="jumbotron">
-    <div class="container">
-      <h1>{% trans "URBAN EEA & SIS GeoNode" %}</h1>
-      <p>{% blocktrans %}Platform to share environmental information in Oslo.{% endblocktrans %}</p>
-    </div>
+      <div class="intro">
+          <img src = '../img/Sentinel2_strip.png'>
+
+          <div class="container">
+              <h1>{% trans "URBAN EEA & SIS GeoNode" %}</h1>
+              <p>{% blocktrans %}Platform to share environmental information in Oslo.{% endblocktrans %}</p>
+          </div>
+      </div>
   </div>
   {% endblock %}
 
