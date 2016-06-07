@@ -10,7 +10,7 @@
 {% block middle %}
    {{ block.super }}
   {% block hero %}
-  <div class="jumbotron" class="img-responsive" style="background: url('static/geonode/img/Sentinel2_strip_half.png'); width: 100%; height: 300px; opacity: 0.8">
+  <div class="jumbotron" class="img-responsive" style="background: url('static/geonode/img/Oslo_cover.png'); width: 100%; height: 300px; opacity: 0.8">
       <div class="intro">
           <div class="container">
               <h1 align="center" style="text-shadow: 4px 4px black">{% trans "URBAN" %}</h1>
@@ -48,7 +48,7 @@
       <div class="col-md-4">
         <p><a href="{% url "document_browse" %}"><i class="fa fa-file-text fa-5x"></i></a></p>
         <h2><a href="{% url "document_browse" %}">{{ facets.document|default:_("No") }} {% blocktrans count counter=facets.document %}Document{% plural %}Documents{% endblocktrans %}</a></h2>
-        <p>{% trans "Users can upload documents related to the projects. Download the documents in pdf format" %}</p>
+        <p>{% trans "Users can upload documents related to the projects. Download the documents in pdf format." %}</p>
         <p><a class="btn btn-default" href="{% url "document_browse" %}" role="button">{% trans "See documents" %} &raquo;</a></p>
       </div>
     {% endwith %}
