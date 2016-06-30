@@ -7,8 +7,6 @@ pip-log.txt
 MANIFEST
 dist
 
-/geoserver/
-
 .jshintrc
 /static/.components/
 /static/geoexplorer/
