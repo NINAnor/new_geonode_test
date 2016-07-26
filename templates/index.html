@@ -3,20 +3,20 @@
 {% load staticfiles %}
 {% load base_tags %}
 
-{% block title %} {% trans "Urban" %} - {{ block.super }} {% endblock %}
+{% block title %} {% trans "Welcome!" %} - {{ block.super }} {% endblock %}
 
 {% block body_class %}home{% endblock %}
 
 {% block middle %}
    {{ block.super }}
   {% block hero %}
-  <div class="jumbotron" class="img-responsive" style="background: url('static/geonode/img/Oslo_cover.png'); width: 100%; height: 300px; opacity: 0.8">
-      <div class="intro">
-          <div class="container">
-              <h1 align="center" style="text-shadow: 4px 4px black">{% trans "URBAN" %}</h1>
-              <h1 align="center" style="text-shadow: 4px 4px black">{% trans "Experimental Ecosystem Accounting" %}</h1>
-          </div>
-      </div>
+  <div class="jumbotron">
+    <div class="container">
+      <h1>{% trans "Welcome" %}</h1>
+      <p>{% blocktrans %}GeoNode is an open source platform for sharing geospatial data and maps.{% endblocktrans %}</p>
+      <p>{% blocktrans %}If you have any questions about the software or service, join our <a href="http://lists.osgeo.org/cgi-bin/mailman/listinfo/geonode-users">mailing list</a>.{% endblocktrans %}</p>
+      <span>{% trans 'Need help?' %} <a href="http://docs.geonode.org/en/latest/tutorials/users/quickstart/index.html">{% trans 'Getting Started' %}</a></span>
+    </div>
   </div>
   {% endblock %}
 
@@ -46,10 +46,10 @@
         {% endif %}
       </div>
       <div class="col-md-4">
-        <p><a href="{% url "document_browse" %}"><i class="fa fa-file-text fa-5x"></i></a></p>
-        <h2><a href="{% url "document_browse" %}">{{ facets.document|default:_("No") }} {% blocktrans count counter=facets.document %}Document{% plural %}Documents{% endblocktrans %}</a></h2>
-        <p>{% trans "Users can upload documents related to the projects. Download the documents in pdf format." %}</p>
-        <p><a class="btn btn-default" href="{% url "document_browse" %}" role="button">{% trans "See documents" %} &raquo;</a></p>
+        <p><a href="{% url "profile_browse" %}"><i class="fa fa-user fa-5x"></i></a></p>
+        <h2><a href="{% url "profile_browse" %}">{{ facets.user|default:_("No") }} {% blocktrans count counter=facets.user %}User{% plural %}Users{% endblocktrans %}</a></h2>
+        <p>{% trans "GeoNode allows registered users to easily upload geospatial data in several formats including shapefile and GeoTiff." %}</p>
+        <p><a class="btn btn-default" href="{% url "profile_browse" %}" role="button">{% trans "See users" %} &raquo;</a></p>
       </div>
     {% endwith %}
     </div>
