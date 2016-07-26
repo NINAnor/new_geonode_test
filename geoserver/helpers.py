@@ -325,20 +325,19 @@ def delete_from_postgis(resource_name):
     """
     import psycopg2
     db = ogc_server_settings.datastore_db
-    conn = None
+    conn = psycopg2.connect(
+        "dbname='" +
+        db['NAME'] +
+        "' user='" +
+        db['USER'] +
+        "'  password='" +
+        db['PASSWORD'] +
+        "' port=" +
+        db['PORT'] +
+        " host='" +
+        db['HOST'] +
+        "'")
     try:
-        conn = psycopg2.connect(
-            "dbname='" +
-            db['NAME'] +
-            "' user='" +
-            db['USER'] +
-            "'  password='" +
-            db['PASSWORD'] +
-            "' port=" +
-            db['PORT'] +
-            " host='" +
-            db['HOST'] +
-            "'")
         cur = conn.cursor()
         cur.execute("SELECT DropGeometryTable ('%s')" % resource_name)
         conn.commit()
@@ -348,11 +347,7 @@ def delete_from_postgis(resource_name):
             resource_name,
             str(e))
     finally:
-        try:
-            if conn:
-                conn.close()
-        except Exception as e:
-            logger.error("Error closing PostGIS conn %s:%s", resource_name, str(e))
+        conn.close()
 
 
 def gs_slurp(
@@ -365,8 +360,7 @@ def gs_slurp(
         filter=None,
         skip_unadvertised=False,
         skip_geonode_registered=False,
-        remove_deleted=False,
-        permissions=None):
+        remove_deleted=False):
     """Configure the layers available in GeoServer in GeoNode.
 
        It returns a list of dictionaries with the name of the layer,
@@ -491,11 +485,7 @@ def gs_slurp(
                     resource.name.encode('utf-8'), e), None, sys.exc_info()[2]
         else:
             if created:
-                if not permissions:
-                    layer.set_default_permissions()
-                else:
-                    layer.set_permissions(permissions)
-
+                layer.set_default_permissions()
                 status = 'created'
                 output['stats']['created'] += 1
             else:
@@ -969,35 +959,28 @@ def _create_db_featurestore(name, data, overwrite=False, charset="UTF-8", worksp
     """
     cat = gs_catalog
     dsname = ogc_server_settings.DATASTORE
-
-    ds_exists = False
     try:
         ds = get_store(cat, dsname, workspace=workspace)
-        ds_exists = True
+
     except FailedRequestError:
         ds = cat.create_datastore(dsname, workspace=workspace)
-
-    db = ogc_server_settings.datastore_db
-    db_engine = 'postgis' if \
-        'postgis' in db['ENGINE'] else db['ENGINE']
-    ds.connection_parameters.update(
-        {'validate connections': 'true',
-         'max connections': '10',
-         'min connections': '1',
-         'fetch size': '1000',
-         'host': db['HOST'],
-         'port': db['PORT'],
-         'database': db['NAME'],
-         'user': db['USER'],
-         'passwd': db['PASSWORD'],
-         'dbtype': db_engine}
-    )
-
-    if ds_exists:
-        ds.save_method = "PUT"
-
-    cat.save(ds)
-    ds = get_store(cat, dsname, workspace=workspace)
+        db = ogc_server_settings.datastore_db
+        db_engine = 'postgis' if \
+            'postgis' in db['ENGINE'] else db['ENGINE']
+        ds.connection_parameters.update(
+            {'validate connections': 'true',
+             'max connections': '10',
+             'min connections': '1',
+             'fetch size': '1000',
+             'host': db['HOST'],
+             'port': db['PORT'],
+             'database': db['NAME'],
+             'user': db['USER'],
+             'passwd': db['PASSWORD'],
+             'dbtype': db_engine}
+        )
+        cat.save(ds)
+        ds = get_store(cat, dsname, workspace=workspace)
 
     try:
         cat.add_data_to_store(ds, name, data,
